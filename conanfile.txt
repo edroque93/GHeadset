@@ -1,0 +1,5 @@
+[requires]
+hidapi/0.11.0
+
+[generators]
+cmake
