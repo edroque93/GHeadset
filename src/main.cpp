@@ -1,5 +1,5 @@
 #include <iostream>
-#include <hidapi.h>
+#include <hidapi/hidapi.h>
 
 int main(const int argc, const char **argv)
 {
