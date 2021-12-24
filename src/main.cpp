@@ -66,7 +66,7 @@ void set_fixed(hid_device* dev, uint8_t r, uint8_t g, uint8_t b, LedStrip ledStr
 	{
 		hid_write(dev, data.data(), HIDPP_LONG_MESSAGE_LENGTH);
 	}
-	if (ledStrip == LedStrip::Both) usleep(10*1000);
+	if (ledStrip == LedStrip::Both) usleep(10*1000); // It seems it requires a longer sleep
 	if (ledStrip == LedStrip::Up || ledStrip == LedStrip::Both)
 	{
 		data[4] = 0x01;
@@ -74,15 +74,19 @@ void set_fixed(hid_device* dev, uint8_t r, uint8_t g, uint8_t b, LedStrip ledStr
 	}
 }
 
-void turn_off(hid_device* dev)
+void turnOff(hid_device* dev)
 {
-    uint8_t data_off[HIDPP_LONG_MESSAGE_LENGTH] = { 0x11, 0xff, 0x04, 0x3e, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
-    hid_write(dev, data_off, HIDPP_LONG_MESSAGE_LENGTH);
+	std::vector<uint8_t> data(HIDPP_LONG_MESSAGE_LENGTH, 0);
+	data[0] = 0x11; // Long message
+	data[1] = 0xff; // Device
+	data[2] = 0x04;
+	data[3] = 0x3e;
+	data[4] = 0x00; // Led strip
 
-    usleep(1 * 1000); // wait before next request, otherwise device ignores one of them, on windows at least.
-
-    uint8_t data_logo_off[HIDPP_LONG_MESSAGE_LENGTH] = { 0x11, 0xff, 0x04, 0x3e, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
-    hid_write(dev, data_logo_off, HIDPP_LONG_MESSAGE_LENGTH);
+    hid_write(dev, data.data(), HIDPP_LONG_MESSAGE_LENGTH);
+    usleep(1000);
+	data[4] = 0x01;
+    hid_write(dev, data.data(), HIDPP_LONG_MESSAGE_LENGTH);
 }
 
 int main(const int argc, const char **argv)
@@ -101,13 +105,12 @@ int main(const int argc, const char **argv)
 		std::cout << std::to_string((uint64_t)dev) << std::endl;
 		if (dev != nullptr)
 		{
-			// turn_off(dev);
-			set_fixed(dev, 0xff, 0, 0, LedStrip::Up);
-			usleep(100*1000);
-			set_fixed(dev, 0, 0xff, 0, LedStrip::Bottom);
-			usleep(100*1000);
-			set_fixed(dev, 0x52, 0x80, 0x71, LedStrip::Both); // #528071
-
+			turnOff(dev);
+			// set_fixed(dev, 0xff, 0, 0, LedStrip::Up);
+			// usleep(100*1000);
+			// set_fixed(dev, 0, 0xff, 0, LedStrip::Bottom);
+			// usleep(100*1000);
+			// set_fixed(dev, 0x52, 0x80, 0x71, LedStrip::Both); // #528071
 		}
 	}
 
