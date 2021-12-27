@@ -4,6 +4,8 @@
 
 #include <vector>
 #include <cstdint>
+#include <chrono>
+#include <thread>
 #include <hidapi/hidapi.h>
 
 #include "device.hpp"
@@ -16,9 +18,12 @@ namespace GHeadset::dev
         public:
             enum class LEDStrip { Top, Bottom, Both };
 
-            // This should be static info
+            // TODO: This should be static info
             uint16_t getProduct() override { return 0x0ab5; };
 
             void turnOff(hid_device* dev);
+        private:
+            static const int delayMs = 10;
+        	static const std::vector<uint8_t> offTopStrip, offBottomStrip;
     };
 }
