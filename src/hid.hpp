@@ -1,19 +1,20 @@
 #pragma once
 
+#include <array>
 #include <cstdint>
 #include <vector>
 #include <hidapi/hidapi.h>
 
-
 namespace GHeadset::hid
 {
-    static const uint16_t logitechVendor = 0x046d;
-    
-    static const uint8_t longMessageOp = 0x11;
-    static const uint8_t longMessageLength = 0x14;
+    const uint16_t logitechVendor = 0x046d;
 
-    static inline int write(hid_device* dev, std::vector<uint8_t> data)
+    const uint8_t longMessageOp = 0x11;
+    const uint8_t longMessageLength = 0x14;
+
+    template<std::size_t S>
+    inline int write(hid_device* dev, std::array<uint8_t, S> data)
     {
-        return hid_write(dev, data.data(), data.size());
+        return hid_write(dev, data.data(), S);
     }
 }

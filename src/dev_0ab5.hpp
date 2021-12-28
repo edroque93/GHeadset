@@ -2,12 +2,14 @@
 
 #pragma once
 
-#include <vector>
-#include <cstdint>
+#include <array>
+#include <cassert>
 #include <chrono>
-#include <thread>
+#include <cstdint>
 #include <hidapi/hidapi.h>
+#include <thread>
 
+#include "color.hpp"
 #include "device.hpp"
 #include "hid.hpp"
 
@@ -18,12 +20,18 @@ namespace GHeadset::dev
         public:
             enum class LEDStrip { Top, Bottom, Both };
 
-            // TODO: This should be static info
-            uint16_t getProduct() override { return 0x0ab5; };
+            Dev_0ab5();
 
-            void turnOff(hid_device* dev);
+            inline uint16_t getProduct() override { return 0x0ab5; };
+
+            void setLightOff(LEDStrip led = LEDStrip::Both);
+            void setLightFixed(Color::RGB color, LEDStrip led = LEDStrip::Both);
         private:
-            static const int delayMs = 10;
-        	static const std::vector<uint8_t> offTopStrip, offBottomStrip;
+            static const std::chrono::milliseconds delayMs;
+        	static std::array<uint8_t, GHeadset::hid::longMessageLength> offStripTemplate;
+        	static std::array<uint8_t, GHeadset::hid::longMessageLength> colorStripTemplate;
+
+            std::unique_ptr<hid_device, decltype(&hid_close)> device;
+            std::chrono::time_point<std::chrono::system_clock> lastCmd;
     };
 }
