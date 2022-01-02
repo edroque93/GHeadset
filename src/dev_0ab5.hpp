@@ -6,6 +6,7 @@
 #include <cassert>
 #include <chrono>
 #include <cstdint>
+#include <cmath>
 #include <hidapi/hidapi.h>
 #include <thread>
 
@@ -33,5 +34,7 @@ namespace GHeadset::dev
 
             std::unique_ptr<hid_device, decltype(&hid_close)> device;
             std::chrono::time_point<std::chrono::system_clock> lastCmd;
+
+            double estimateBatteryPercentage(uint16_t voltage);
     };
 }

@@ -34,6 +34,23 @@ Dev_0ab5::Dev_0ab5() : device(getDevice())
 		throw std::runtime_error("Cannot open device 0x0ab5");
 }
 
+double Dev_0ab5::estimateBatteryPercentage(uint16_t voltage)
+{
+	// Based on empirical data from github:
+	// https://github.com/ashkitten/g933-utils/blob/master/libg933/src/maps/0A5B/discharging.csv
+	// TODO: check fitness for device 0x0ab5
+
+	if (voltage < 3350) return 0.0;
+    if (voltage > 4050) return 100.0;
+	return 
+		+ 9.13360662041828E-07 * std::pow(voltage, 5) 
+		- 0.000256641 * std::pow(voltage, 4) 
+		+ 0.0270439922 * std::pow(voltage, 3) 
+		- 1.2500185151 * std::pow(voltage, 2) 
+		+ 26.4924075939 * voltage
+		+ 3392.3839476991;
+}
+
 void Dev_0ab5::setLightOff(LEDStrip led)
 {
 	if (led == LEDStrip::Top || led == LEDStrip::Both) 
