@@ -11,13 +11,7 @@ int main(const int argc, const char **argv)
 
 	GHeadset::dev::Dev_0ab5 headset;
 	headset.setLightOff();
-
-	for (int i = 0; i < 10; i++)
-	{
-		headset.setLightFixed(GHeadset::Color::Palette::Red);
-		headset.setLightFixed(GHeadset::Color::Palette::Green);
-		headset.setLightFixed(GHeadset::Color::Palette::Blue);
-	}
+	//headset.setLightFixed(GHeadset::Color::Palette::DarkOrange);
 
 	return 0;
 }
