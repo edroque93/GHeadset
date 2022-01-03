@@ -18,7 +18,7 @@ endif()
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic -Werror")
 
-set(SOURCE src/main.cpp src/dev_0ab5.cpp)
+set(SOURCE src/main.cpp src/dev_0ab5.cpp src/parameterparser.cpp)
 
 add_executable(${PROJECT_NAME} ${SOURCE})
 target_link_libraries(${PROJECT_NAME} ${CONAN_LIBS})
