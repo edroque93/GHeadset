@@ -1,3 +1,7 @@
+# Do not keep track of these folders
 bin/
 build/
 .vscode/
+
+# Data file used to approximate the empirical discharge curve
+*.ods
