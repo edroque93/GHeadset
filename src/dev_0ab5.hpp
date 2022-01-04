@@ -13,6 +13,7 @@
 #include "color.hpp"
 #include "device.hpp"
 #include "hid.hpp"
+#include <gsl/gsl_poly.h>
 
 namespace GHeadset::dev
 {
@@ -25,12 +26,14 @@ namespace GHeadset::dev
 
             inline uint16_t getProduct() override { return 0x0ab5; };
 
+            double getBatteryPercentage();
             void setLightOff(LEDStrip led = LEDStrip::Both);
             void setLightFixed(Color::RGB color, LEDStrip led = LEDStrip::Both);
         private:
             static const std::chrono::milliseconds delayMs;
         	static std::array<uint8_t, GHeadset::hid::longMessageLength> offStripTemplate;
         	static std::array<uint8_t, GHeadset::hid::longMessageLength> colorStripTemplate;
+        	static std::array<uint8_t, GHeadset::hid::longMessageLength> batteryRequest;
 
             std::unique_ptr<hid_device, decltype(&hid_close)> device;
             std::chrono::time_point<std::chrono::system_clock> lastCmd;
