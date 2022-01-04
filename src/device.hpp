@@ -18,7 +18,7 @@ namespace GHeadset::dev
         protected:
             virtual inline std::unique_ptr<hid_device, decltype(&hid_close)> getDevice()
             {
-                return std::unique_ptr<hid_device, decltype(&hid_close)> (hid_open(GHeadset::hid::logitechVendor, getProduct(), nullptr), hid_close);
+                return std::unique_ptr<hid_device, decltype(&hid_close)>(hid_open(GHeadset::hid::logitechVendor, getProduct(), nullptr), hid_close);
             }
     };
 }

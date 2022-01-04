@@ -170,7 +170,7 @@ namespace GHeadset::Color
 
     static void __attribute__((unused)) calcGammaCorrection()
     {
-        std::cout << "static const std::vector<uint8_t> gammaCorrection = {";
+        std::cout << "constexpr std::array<uint8_t, 256> gammaCorrection = {";
         for (int i = 0; i < 0x100; i++)
         {
             if (!(i%16)) std::cout << "\n\t";
