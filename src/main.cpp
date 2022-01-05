@@ -16,11 +16,11 @@ enum class Command
 GHeadset::Color::RGB parseColor(std::string rgb)
 {
 	size_t size = rgb.length();
-	if ((size == 7 && rgb[0] != '#') || size < 6 || size > 7) throw std::runtime_error("Cannot parse color");
+	if (size != 6) throw std::runtime_error("Cannot parse color");
 	return GHeadset::Color::RGB(
-		std::strtol(rgb.substr(1, 2).data(), nullptr, 16),
-		std::strtol(rgb.substr(3, 2).data(), nullptr, 16),
-		std::strtol(rgb.substr(5, 2).data(), nullptr, 16));
+		std::strtol(rgb.substr(0, 2).data(), nullptr, 16),
+		std::strtol(rgb.substr(2, 2).data(), nullptr, 16),
+		std::strtol(rgb.substr(4, 2).data(), nullptr, 16));
 }
 
 int main(const int argc, const char **argv)
