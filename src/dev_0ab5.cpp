@@ -39,15 +39,13 @@ Dev_0ab5::Dev_0ab5() : device(getDevice())
 {
 	if (device == nullptr)
 		throw std::runtime_error("Cannot open device 0x0ab5");
-
-	getBatteryPercentage();
 }
 
 double Dev_0ab5::estimateBatteryPercentage(uint16_t voltage)
 {
 	// Based on empirical data from github:
 	// https://github.com/ashkitten/g933-utils/blob/master/libg933/src/maps/0A5B/discharging.csv
-	// TODO: check fitness for device 0x0ab5
+	// TODO: fitness for device 0x0ab5 is bad, discharge curve must be adjusted
 
 	if (voltage < 3350) return 0.0;
     if (voltage > 4050) return 100.0;
@@ -83,13 +81,8 @@ double Dev_0ab5::getBatteryPercentage()
     std::array<uint8_t, 7> data;
     int readResult = hid_read_timeout(device.get(), data.data(), data.size(), 5000);
 	if (readResult <= 0) throw std::runtime_error("Battery request error or timed out");
-
 	uint16_t voltage = (data[4] << 8) | data[5];
-	std::cout << "Voltage read is: " << voltage << std::endl;
-	double percent = estimateBatteryPercentage(voltage);
-	std::cout << "Estimated percentage: " << percent << std::endl;
-
-	return percent;
+	return estimateBatteryPercentage(voltage);
 }
 
 void Dev_0ab5::setLightOff(LEDStrip led)
