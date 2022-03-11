@@ -48,7 +48,7 @@ double Dev_0ab5::estimateBatteryPercentage(uint16_t voltage)
 	// TODO: fitness for device 0x0ab5 is bad, discharge curve must be adjusted
 
 	if (voltage < 3350) return 0.0;
-    if (voltage > 4050) return 100.0;
+        if (voltage > 4050) return 100.0;
 
 	// Don't mind me if tryhard
 	std::array<double, 6> coefficients = { 
@@ -78,8 +78,8 @@ double Dev_0ab5::estimateBatteryPercentage(uint16_t voltage)
 double Dev_0ab5::getBatteryPercentage()
 {
 	GHeadset::hid::write(device.get(), batteryRequest);
-    std::array<uint8_t, 7> data;
-    int readResult = hid_read_timeout(device.get(), data.data(), data.size(), 5000);
+        std::array<uint8_t, 7> data;
+        int readResult = hid_read_timeout(device.get(), data.data(), data.size(), 5000);
 	if (readResult <= 0) throw std::runtime_error("Battery request error or timed out");
 	uint16_t voltage = (data[4] << 8) | data[5];
 	return estimateBatteryPercentage(voltage);
